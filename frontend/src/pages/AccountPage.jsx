@@ -1,6 +1,5 @@
 import React from "react";
 import "../App.css";
-import "./AccountPage.css";
 
 const AccountPage = () => {
   const user = JSON.parse(localStorage.getItem("user"));

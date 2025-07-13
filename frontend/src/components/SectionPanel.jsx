@@ -1,6 +1,5 @@
 import React from "react";
 import "../App.css";
-import "./SectionPanel.css";
 
 const SectionPanel = ({ children, className = "" }) => (
   <section className={`section-panel glass-panel ${className}`}>

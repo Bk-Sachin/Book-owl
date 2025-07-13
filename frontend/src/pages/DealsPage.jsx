@@ -1,6 +1,5 @@
 import React from "react";
 import "../App.css";
-import "./DealsPage.css";
 
 const DealsPage = () => (
   <main className="main-content mt-5 pt-5">
