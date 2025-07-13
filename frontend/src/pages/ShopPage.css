@@ -1,0 +1,14 @@
+.books-row {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.shop-search-maxwidth-400 {
+  max-width: 400px;
+}
+
+.shop-sort-minwidth-150 {
+  min-width: 150px;
+} 

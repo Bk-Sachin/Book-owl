@@ -1,0 +1,10 @@
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+  margin-top: 8px;
+}
+
+.category-btn-bold {
+  font-weight: bold;
+}

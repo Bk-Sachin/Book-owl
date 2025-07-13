@@ -1,0 +1,24 @@
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-bg);
+  margin-bottom: 24px;
+  font-family: 'Orbitron', 'Exo', sans-serif;
+}
+
+.features-section h2 {
+  color: var(--accent-bg);
+}
+
+.feature-card {
+  background: var(--glass-bg);
+  color: var(--text-main);
+}
+
+.feature-card h5 {
+  color: var(--accent-bg);
+}
+
+.feature-card p {
+  color: var(--text-main);
+} 

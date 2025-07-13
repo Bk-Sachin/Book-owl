@@ -1,0 +1,7 @@
+.hero-section h1 {
+  color: var(--accent-bg);
+}
+
+.hero-section p {
+  color: var(--text-main);
+} 
