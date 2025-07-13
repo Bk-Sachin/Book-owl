@@ -1,4 +1,4 @@
-// Use VITE_API_URL for deployment. Set VITE_API_URL in your .env file (e.g. https://your-backend.onrender.com)
+
 const API_URL = import.meta.env.VITE_API_URL + '/books';
 
 function getToken() {
