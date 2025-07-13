@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5000/cart';
+// Use VITE_API_URL for deployment. Set VITE_API_URL in your .env file (e.g. https://your-backend.onrender.com)
+const API_URL = import.meta.env.VITE_API_URL + '/cart';
 
 function getToken() {
   return localStorage.getItem('authToken') || localStorage.getItem('token');
