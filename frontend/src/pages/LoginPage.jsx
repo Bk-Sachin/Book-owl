@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import './LoginPage.css';
-const API_URL = 'http://localhost:5000/auth';
+// Use VITE_API_URL for deployment. Set VITE_API_URL in your .env file (e.g. https://book-owl-backend.onrender.com)
+const API_URL = import.meta.env.VITE_API_URL + '/auth';
 
 function PasswordInput({ value, onChange, placeholder, autoComplete }) {
   const [show, setShow] = useState(false);
