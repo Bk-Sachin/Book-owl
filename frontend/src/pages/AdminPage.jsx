@@ -38,6 +38,8 @@ const AdminPage = () => {
   const [success, setSuccess] = useState("");
   const [search, setSearch] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [coverType, setCoverType] = useState('url'); // 'url' or 'upload'
+  const [coverFile, setCoverFile] = useState(null);
 
   // Handle form input
   const handleChange = (e) => {
@@ -58,7 +60,7 @@ const AdminPage = () => {
       !form.title ||
       !form.author ||
       !form.price ||
-      !form.cover ||
+      (!form.cover && !coverFile) ||
       !form.category ||
       form.stock === ""
     ) {
@@ -92,10 +94,16 @@ const AdminPage = () => {
         await updateBook(editingId, payload);
         setSuccess("Book updated successfully.");
       } else {
-        await addBook(payload);
+        if (coverType === 'upload' && coverFile) {
+          // Use addBook with coverFile
+          await addBook({ ...payload, coverFile });
+        } else {
+          await addBook(payload);
+        }
         setSuccess("Book added successfully.");
       }
       setForm(initialForm);
+      setCoverFile(null);
       setEditingId(null);
     } catch (err) {
       setError(err.message || "Error saving book.");
@@ -145,23 +153,10 @@ const AdminPage = () => {
       book.category.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Handle file upload
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("cover", file);
-    try {
-      const res = await axios.post("/api/books/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setForm((f) => ({ ...f, cover: res.data.url }));
-    } catch (err) {
-      alert("Image upload failed");
-    } finally {
-      setUploading(false);
-    }
+  // Handle file upload (just set file in state, upload on submit)
+  const handleFileChange = (e) => {
+    setCoverFile(e.target.files[0] || null);
+    setForm(f => ({ ...f, cover: "" })); // clear URL if file selected
   };
 
   return (
@@ -220,25 +215,53 @@ const AdminPage = () => {
                 </div>
                 <div className="mb-2">
                   <label className="form-label">Cover Image *</label>
-                  <input
-                    className="form-control mb-2"
-                    name="cover"
-                    value={form.cover}
-                    onChange={handleChange}
-                    placeholder="Paste image URL or upload below"
-                    required
-                  />
-                  <input
-                    className="form-control"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                  {uploading && <div className="text-info">Uploading...</div>}
-                  {form.cover && (
+                  <div className="mb-2 d-flex gap-3">
+                    <label>
+                      <input
+                        type="radio"
+                        name="coverType"
+                        value="url"
+                        checked={coverType === 'url'}
+                        onChange={() => { setCoverType('url'); setCoverFile(null); }}
+                      />
+                      <span className="ms-1">Image URL</span>
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="coverType"
+                        value="upload"
+                        checked={coverType === 'upload'}
+                        onChange={() => { setCoverType('upload'); setForm(f => ({ ...f, cover: "" })); }}
+                      />
+                      <span className="ms-1">Upload Image</span>
+                    </label>
+                  </div>
+                  {coverType === 'url' && (
+                    <input
+                      className="form-control mb-2"
+                      name="cover"
+                      value={form.cover}
+                      onChange={handleChange}
+                      placeholder="Paste image URL"
+                      required={coverType === 'url'}
+                      disabled={coverType !== 'url'}
+                    />
+                  )}
+                  {coverType === 'upload' && (
+                    <input
+                      className="form-control"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      required={coverType === 'upload'}
+                      disabled={coverType !== 'upload'}
+                    />
+                  )}
+                  {(form.cover || coverFile) && (
                     <div className="mt-2 text-center">
                       <img
-                        src={form.cover}
+                        src={coverType === 'url' ? form.cover : coverFile ? URL.createObjectURL(coverFile) : ''}
                         alt="Preview"
                         className="img-fluid"
                         style={{
